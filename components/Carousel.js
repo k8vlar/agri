@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image, FlatList } from 'react-native'
 import React from 'react'
-
+import Colors from '../constants/Colors';
 import { useState } from 'react';
 
 const Carousel= () => {
@@ -36,19 +36,19 @@ export default Carousel
 
 const styles = StyleSheet.create({
     carousel: {
-      flex: 1,
-      height: 150, // Adjust the height to fit your carousel
+      height: 120, // Adjust the height to fit your carousel
     },
     carouselItem: {
-      width: 150, // Adjust the width to fit your carousel item
+      width: 120, // Adjust the width to fit your carousel item
       marginRight: 10, // Add some margin between items
     },
     pictureCarousel: {
-      height: 120, // Adjust the height to fit your image
-      width: 150, // Adjust the width to fit your image
+      height: 90, // Adjust the height to fit your image
+      width: 120, // Adjust the width to fit your image
       borderRadius: 10, // Add some border radius to the image
     },
     carouselText: {
+      color: Colors.danger,
       fontSize: 18, // Adjust the font size to fit your text
       textAlign: 'center', // Center the text
     },

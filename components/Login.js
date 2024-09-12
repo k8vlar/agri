@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View,TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
+import Colors from '../constants/Colors'
 
 const Login = ({navigation}) => {
     const [userName, setUserName]= useState('')
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
       justifyContent: "center",
     },
     welcomeText: {
-      color: "#fb5b5a",
+      color: Colors.greenAgri,
       fontWeight: "bold",
       fontSize: 50,
       textAlign: "center",
