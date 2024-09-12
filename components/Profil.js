@@ -5,7 +5,7 @@ import TextInputEx from "./TextInputEx";
 const Profil = () => {
   return (
     <ScrollView>
-    <View style={styles.container}>
+    <View style={styles.profilPage}>
       <TextInputEx></TextInputEx>
       <Text>Profile</Text>
     </View>
@@ -32,7 +32,7 @@ const Profil = () => {
 export default Profil;
 
 const styles = StyleSheet.create({
-  container: {
+  profilPage: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
