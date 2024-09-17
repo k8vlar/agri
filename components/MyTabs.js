@@ -9,35 +9,15 @@ import Products from "./Products";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import BuyPage from "./BuyPage";
+import About from "./About";
+import MentionsLegales from "../screens/MentionsLegales";
+import { useCart } from "./CartContext";
 
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
-function ProductsScreen({ navigation }) {
-  return (
-    <View>
-      <Text>ProductsSecondScreen</Text>
-      <Button
-        title="go to Category"
-        onPress={() => navigation.navigate("Categories")}
-      />
-    </View>
-  );
-}
-function CategoriesScreen({ navigation }) {
-  return (
-    <View>
-      <Text>CategorySecondScreen</Text>
-      <Button
-        title="go back to back"
-        onPress={() => navigation.navigate("Produits")}
-      />
-    </View>
-  );
-}
 const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
+const Stack2 = createNativeStackNavigator();
 
 function MyTabs() {
+  const { cartItemsCount } = useCart();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -46,7 +26,7 @@ function MyTabs() {
         // tabBarButton: (props) => <TouchableOpacity {...props} />
         tabBarStyle: { backgroundColor: Colors.greenAgri},
         // tabBarBackground:()=>{Colors.greenAgri}
-
+        tabBarHideOnKeyboard:true,
         headerStyle: {
           backgroundColor: Colors.greenAgri,
         },
@@ -77,6 +57,7 @@ function MyTabs() {
           tabBarIcon: ({ color }) => (
             <Ionicons name="albums" size={20} color={color} />
           ),
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -87,17 +68,18 @@ function MyTabs() {
           tabBarIcon: ({ color }) => (
             <Ionicons name="nutrition" size={20} color={color} />
           ),
+          headerShown: false,
         }}
       ></Tab.Screen>
       <Tab.Screen
-        name="Panier"
+        name="BuyPage"
         component={BuyPage}
         options={{
           tabBarLabel: "Panier",
           tabBarIcon: ({ color }) => (
             <Ionicons name="card" size={20} color={color} />
           ),
-          tabBarBadge: "0",
+          tabBarBadge: cartItemsCount > 0 ? cartItemsCount.toString() : null,
           headerShown: false,
         }}
       >
@@ -119,8 +101,8 @@ function MyTabs() {
       </Tab.Screen>
       
       <Tab.Screen
-        name="Mon Compte"
-        component={Login}
+        name="A Propos"
+        component={About}
         options={{
           tabBarIcon: ({ color }) => (
             <Ionicons name="person" size={20} color={color} />
@@ -132,9 +114,9 @@ function MyTabs() {
     
   );
 }
-const StackScreen = () => {
+const StackScreen = ({navigation}) => {
   return (
-    <Stack.Navigator
+    <Stack2.Navigator
       screenOptions={{
         headerStyle: {
           backgroundColor: Colors.greenAgri,
@@ -146,26 +128,27 @@ const StackScreen = () => {
         headerTitleAlign: 'center',
       }}
     >
-      <Stack.Screen
+      <Stack2.Screen
         name="Produits"
         component={Products}
         options={{
           headerShown: false,
         }}
       />
-      <Stack.Screen
+     
+      <Stack2.Screen
         name="Categories"
         component={Category}
       />
-      <Stack.Screen
-        name="ExternalPage1"
-        component={ExternalPage1}
+      <Stack2.Screen
+        name="MentionsLégales"
+        component={MentionsLegales}
       />
-      <Stack.Screen
+      <Stack2.Screen
         name="ExternalPage2"
         component={ExternalPage2}
       />
-    </Stack.Navigator>
+    </Stack2.Navigator>
   );
 };
 

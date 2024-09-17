@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image, FlatList } from 'react-native'
 import React from 'react'
 import Colors from '../constants/Colors';
 import { useState } from 'react';
+import _ from 'lodash';
 
 const Carousel= () => {
     const [pictures, setPictures]= useState(
@@ -14,10 +15,11 @@ const Carousel= () => {
         ]
     
       )
+      const shuffledPictures= _.shuffle(pictures)
       return (
         <FlatList
           style={styles.carousel}
-          data={pictures}
+          data={shuffledPictures}
           renderItem={({ item }) => (
             <View style={styles.carouselItem}>
               <Image style={styles.pictureCarousel} source={item.image} />

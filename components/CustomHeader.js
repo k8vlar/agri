@@ -1,28 +1,44 @@
 import { StyleSheet, Text, View, Pressable, SafeAreaView,TextInput } from "react-native";
-import React,{useRef, useMemo} from "react";
+import React,{useState, useEffect, useMemo} from "react";
 import { Image } from "react-native";
 import Colors from "../constants/Colors";
-import { useNavigation } from "@react-navigation/native";
-import Products from "./Products";
 import { Link } from "expo-router";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { Keyboard} from "react-native";
 
 
 const CustomHeader = ({openModal}) => {
+  const [headerVisible, setHeaderVisible] = useState(true);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setHeaderVisible(false); // Masquer le conteneur lorsque le clavier est ouvert
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setHeaderVisible(true); // Afficher le conteneur lorsque le clavier est caché
+    });
+
+    // Nettoyage des écouteurs d'événements
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+  
     const SearchBar=()=>(
         <View style={styles.searchContainer}>
                 <View style={styles.searchSection}>
                 <View style={styles.searchField}>
                 <Ionicons
-             name="search-outline" size={20} color={Colors.danger}
+             name="search-outline" size={15} color={Colors.danger}
             style={styles.searchIcon}/>
                 <TextInput style={styles.input} placeholder="Agriculteurs, Producteurs, ..."/>
                 </View>  
                 <Link href={'/'} asChild/>  
                 <TouchableOpacity style={styles.optionButton} onPress={openModal}>
                 <Ionicons
-             name="options-outline" size={22} color={Colors.danger}
+             name="person" size={22} color={Colors.danger}
             style={styles.icon}/>
                 </TouchableOpacity>
                 </View>
@@ -32,30 +48,23 @@ const CustomHeader = ({openModal}) => {
   return (
     
 <SafeAreaView style={styles.safeArea}>
+
+        {headerVisible && ( // Afficher le conteneur seulement si headerVisible est vrai
         <View style={styles.container}>
-         <TouchableOpacity /*onPress={creer fonction pour retour en haut de page sur App (Home notamment)}*/> 
-        <Image
-        source={require("../assets/images/logo.jpg")}
-        style={styles.logo}
-        
-      />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.titleContainer}>
-        <Text style={styles.title}>TerroTerro</Text>
-        <View style={styles.locationName}>
-            <Text style={styles.subTitle}>Nouvelle-Aquitaine</Text>
-            <Ionicons name="chevron-down" size={20} color={Colors.danger}/>
+          <TouchableOpacity>
+            <Image
+              source={require("../assets/images/logo.jpg")}
+              style={styles.logo}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.titleContainer}>
+            <Text style={styles.title}>TerroTerro</Text>
+            <View style={styles.locationName}>
+              <Text style={styles.subTitle}>Direct-Producteur</Text>
+            </View>
+          </TouchableOpacity>
         </View>
-        </TouchableOpacity>
-              
-      
-       
-        <TouchableOpacity>
-        <Ionicons
-             name="person" size={20} color={Colors.danger}
-            style={styles.icon}/>
-        </TouchableOpacity>
-        </View>
+      )}
         <SearchBar/>
         
     </SafeAreaView>
@@ -71,8 +80,9 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         backgroundColor: Colors.greenAgri,
         marginBottom: 10,
+        gap:20,
         alignItems: "center",
-        justifyContent: "space-between",
+        justifyContent:'flex-start',
         paddingHorizontal:20,
         width: "100%",
         height:55
@@ -132,7 +142,8 @@ const styles = StyleSheet.create({
         input:{
             padding:2,
             color:Colors.danger,
-            fontSize:18
+            fontSize:15,
+
 
         },
         searchIcon:{

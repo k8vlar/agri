@@ -1,55 +1,37 @@
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, FlatList,SafeAreaView } from 'react-native';
+import React from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import { useCart } from './CartContext'; // Assurez-vous d'avoir créé ce contexte
+import Colors from '../constants/Colors';
 
-const ArticleItem = ({ item, onQuantityChange }) => {
-  const [quantity, setQuantity] = useState(1);
-
-  const incrementQuantity = () => {
-    const newQuantity = quantity + 1;
-    setQuantity(newQuantity);
-    onQuantityChange(item.id, newQuantity);
-  };
-
-  const decrementQuantity = () => {
-    const newQuantity = quantity > 1 ? quantity - 1 : 1;
-    setQuantity(newQuantity);
-    onQuantityChange(item.id, newQuantity);
-  };
-
+const ArticleItem = ({ item, onQuantityChange, onRemove }) => {
   return (
     <View style={styles.articleContainer}>
-      <Image source={{ uri: item.image }} style={styles.image} />
+      <Image source={item.image} style={styles.image} />
       <View style={styles.articleInfo}>
-        <Text style={styles.articleName}>{item.name}</Text>
+        <Text style={styles.articleName}>{item.title}</Text>
         <Text style={styles.price}>Prix: {item.price.toFixed(2)}€</Text>
         <View style={styles.quantityContainer}>
-          <TouchableOpacity onPress={decrementQuantity} style={styles.quantityButton}>
+          <TouchableOpacity onPress={() => onQuantityChange(item.id, Math.max(1, item.selectedQuantity - 1))} style={styles.quantityButton}>
             <Text style={styles.quantityButtonText}>-</Text>
           </TouchableOpacity>
-          <Text style={styles.quantity}>{quantity}</Text>
-          <TouchableOpacity onPress={incrementQuantity} style={styles.quantityButton}>
+          <Text style={styles.quantity}>{item.selectedQuantity}</Text>
+          <TouchableOpacity onPress={() => onQuantityChange(item.id, item.selectedQuantity + 1)} style={styles.quantityButton}>
             <Text style={styles.quantityButtonText}>+</Text>
           </TouchableOpacity>
         </View>
       </View>
+      <TouchableOpacity onPress={() => onRemove(item.id)} style={styles.removeButton}>
+        <Text style={styles.removeButtonText}>Supprimer</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const BuyPage = () => {
-  const [articles, setArticles] = useState([
-    { id: 1, name: "Légume Premium", price: 1.5, image: "https://example.com/tshirt-image.jpg", quantity: 1 },
-    { id: 2, name: "Carotte Slim", price: 1.25, image: "https://example.com/jean-image.jpg", quantity: 1 },
-    { id: 3, name: "Viande Rouge", price: 3.5, image: "https://example.com/shoes-image.jpg", quantity: 1 },
-  ]);
+  const { cart, updateCartItemQuantity, removeFromCart } = useCart();
 
-  const updateQuantity = (id, newQuantity) => {
-    setArticles(articles.map(article => 
-      article.id === id ? { ...article, quantity: newQuantity } : article
-    ));
-  };
+  const totalPrice = cart.reduce((total, item) => total + item.price * item.selectedQuantity, 0).toFixed(2);
 
-  const totalPrice = articles.reduce((total, article) => total + article.price * article.quantity, 0).toFixed(2);
   const renderFooter = () => (
     <View>
       <Text style={styles.totalPrice}>Prix Total: {totalPrice}€</Text>
@@ -58,15 +40,26 @@ const BuyPage = () => {
       </TouchableOpacity>
     </View>
   );
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Page de Paiement</Text>
-      <FlatList
-        data={articles}
-        renderItem={({ item }) => <ArticleItem item={item} onQuantityChange={updateQuantity} />}
-        keyExtractor={item => item.id.toString()}
-        ListFooterComponent={renderFooter}
-      />
+      {cart.length > 0 ? (
+        <FlatList
+          data={cart}
+          renderItem={({ item }) => (
+            <ArticleItem 
+              item={item} 
+              onQuantityChange={updateCartItemQuantity}
+              onRemove={removeFromCart}
+            />
+          )}
+          keyExtractor={item => item.id.toString()}
+          ListFooterComponent={renderFooter}
+        />
+      ) : (
+        <Text style={styles.noFood}>Votre panier est vide</Text>
+      )}
     </SafeAreaView>
   );
 };
@@ -75,12 +68,16 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#f5f5f5',
+      
+      
     },
     title: {
       fontSize: 24,
       fontWeight: 'bold',
       margin: 20,
+      marginTop:30,
       textAlign: 'center',
+      color:Colors.danger
     },
     articleContainer: {
       flexDirection: 'row',
@@ -146,6 +143,12 @@ const styles = StyleSheet.create({
       fontSize: 18,
       fontWeight: 'bold',
     },
+    noFood:{
+      color:Colors.danger, 
+      fontSize:20, 
+      alignSelf:'center', 
+      marginVertical:"50%"
+    }
   });
 
 export default BuyPage;

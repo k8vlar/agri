@@ -4,8 +4,7 @@ import Colors from "../constants/Colors";
 import BuyPage from "./BuyPage";
 import Map from "./Map";
 import WebviewComponent from "./WebviewComponent";
-import { Dimensions } from "react-native";
-
+import StyledText from "react-native-styled-text";
 import Carousel from '../components/Carousel';
 
 
@@ -28,9 +27,10 @@ const Home = () => {
      
       
 
-    <Text>
+
+    <StyledText>
       iatur nulla reprehenderit. Assumenda dolorem vero odit. Accusamus fugiat dolores esse voluptatum qui cupiditate illo corporis necessitatibus, liberm rem error sunt porro.
-    </Text>
+    </StyledText>
    
     </ScrollView>
     
