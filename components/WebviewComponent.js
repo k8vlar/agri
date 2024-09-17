@@ -15,7 +15,6 @@ export default function WebviewComponent(){
 }
 const styles = StyleSheet.create({
     webViewContainer: {
-      backgroundColor: Colors.greenAgri,
       height:200
       
     },

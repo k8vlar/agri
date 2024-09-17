@@ -1,14 +1,31 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { Pressable, Text, StyleSheet } from 'react-native';
+import Colors from '../constants/Colors';
 
-const ButtonComponent = () => {
-  return (
-    <View>
-      <Text>ButtonComponent</Text>
-    </View>
-  )
-}
+export default  CustomButton = ({ onPress, title, color = Colors.danger }) => (
+  <Pressable 
+    style={({ pressed }) => [
+      styles.button,
+      { backgroundColor: pressed ? Colors.greenAgri : color }
+    ]}
+    onPress={onPress}
+  >
+    <Text style={styles.text}>{title}</Text>
+  </Pressable>
+);
 
-export default ButtonComponent
-
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  button: {
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    margin:5,
+    borderRadius:10,
+    width:200,
+    
+  },
+  text: {
+    color: 'white',
+    fontSize: 16,
+  },
+});
